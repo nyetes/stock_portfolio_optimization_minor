@@ -1,0 +1,152 @@
+
+from django.contrib.auth.models import user
+
+
+class Customer(models.Model):
+   user = models.OneToOneField(User,on_delete = models.CASCADE)
+   full_name = models.CharField(max_length=200)
+   address = models.CharField(max_length = 200, null=True, blank =True)
+   joined_on = models.dateTimeField(auto_now_add = True)
+
+
+   def__str__(self):
+    return slef.full_name
+
+
+
+
+class MobileCategory(models.Model):
+  title = models.CharField(max_length = 200)
+  slug = models.SlugField(unique=True)
+
+  def __str__(self):
+     return self.title
+
+class GadgetCategory(models.Model):
+title = models.CharField(max_length = 200)
+slug = models.SLugField(unique=True)
+
+def __str(self)
+return self.title
+
+
+
+class Mobile(models.Model):
+   mobile_title = models.CharField(max_length=200)
+   slug = models.SLugField(unique = True)
+   mobilecategory = models.ForeignKey(MobileCategory, on_delete = models.CASCADE)
+   image = models.ImageField(upload_to = "mobileproducts")
+   battery = models.CharField(max_length=1000)
+   storage = models.CharField(max_length=300)
+   colors = models.TextField()
+   operating_system = models.TextField()
+   ram = models.CharField(max_length=200)
+   sensors = models.TextField()
+   description = models.TextField()
+   selling_price = models.PositiveIntegerField()
+   original_price = models.PositiveIntegerField()
+   warranty = models.CharField(max_length=300, null=True, blank=True)
+   return_policy = models_CharField(max_length = 300, null =True, blank = True)
+   view_count = models.PositiveIntegerField(default=0)
+
+   def __str__(Self):
+     return self.mobile_title
+
+class Gadget(models.Model)
+  title = models.CharFiels(max_length = 200)
+  slug = models.SlugField(unique = True)
+  gadgetcategory = models.ForeignKey(GadgetCategory,on_delete = models.CASCADE)
+  image = models.ImageFIeld(upload_to = "gadgetproducts")
+  description = models.TextField()
+  selling_price = models.PositiveIntegerField()
+  original_price = models.PositiveIntegerField()
+  warranty = models.CharFiels(max_length= 300,null=True, blank = True)
+  return_policy = models.CharField(max_length = 300, null=True, blank=True)
+  view_count = models.PositiveIntegerField(default = 0)
+
+
+  def __str(self):
+   return self.title
+
+
+
+
+class Cart(models.Model):
+   customer = models.ForeignKey(Customer, on_delete= models.SET_NULL, null=True, blank =True)
+   total = models.PositiveIntegerFiedl(default=0)
+   created _at = models.dateTimeField(auto_now_add = True)
+
+   def__str__(self):
+       return "Cart:" +str(self.id)
+
+class CartProduct(models.Model)
+ cart = models.ForeignKey(Cart, on_delete = models.CASCADE)
+ mobileproduct = models.ForeignKey(Mobile, on_delete= models.CASCADE)
+ gadgetproduct = models.ForeignKey(Gadget, on_delete = models.CASCADE)
+ rate = models.PositiveIntegerField()
+
+ quantity = models.PositiveIntegerField()
+ subtotal = models.PositiveIntegerField()
+ def __str__(self):
+  return "cart:" +str(self.cart.id)+"cartproduct:" +str(self.id)
+
+
+
+
+ORDER_STATUS = (
+("Order received", "Order received),
+("Order processing","order processing"),
+("on the way","on the way"),
+("on the way completed","on the way completed"),
+("order canceled"," order cancelled"),
+)
+
+
+
+
+
+class Order(models.Model):
+
+
+cart = models.OneToOneField(Cart, on_delete= models.CASCADE)
+ordered_by = models.CharField(max_length = 200)
+shipping_address = models.charField(max_length= 200)
+
+mobile= models.CharField(max_length= 200)
+email = models.EmailField(null = True, blank = True)
+subtotal = models.PositiveIntegerField()
+discount= models.POsitiveIntegerField()
+total = models.PositiveIntegerField()
+order_status = models.CharField(max_length=30,choices = ORDER_STATUS)
+created_at = models.DateTimeField(auto_now_add = True)
+
+
+
+def __str__(self):
+ return "order:" +str(self.id)
+
+
+class Comment(models.Model)
+user = models.ForeignKey(User,On_delte = models.CASCADE)
+date = models.DateField(auto_now_add = True)
+comment = models.TextField()
+postmobile = models.ForeignKey(Mobile, related_name="comments", on_delete = models.CASCADE)
+postgagdet = models.ForeignKey(Gadget, related_name = "comments",on_delete = models.CASCADE)
+ def __str(self):
+  return '%s - %s' % (self.mobile.mobile_title, self.user.full_name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
